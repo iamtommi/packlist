@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guida al viaggio</title>
+<style>
+  :root {
+    --bg: #111318;
+    --bg-raised: #181B22;
+    --bg-card: #1D2029;
+    --border: #2A2E3A;
+    --text: #EDEFF4;
+    --text-dim: #8B92A5;
+    --text-faint: #5A6070;
+    --amber: #FF8A3D;
+    --amber-dim: #4A3320;
+    --red: #FF5C5C;
+    --red-dim: #3A1E20;
+    --green: #3DDC97;
+    --green-dim: #163A2C;
+    --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font);
+    -webkit-font-smoothing: antialiased;
+  }
+  body { padding-bottom: 80px; }
+
+  .wrap { max-width: 640px; margin: 0 auto; padding: 0 20px; }
+
+  /* ---------- STICKY NEXT ACTION ---------- */
+  .sticky-bar {
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(17,19,24,0.92);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border);
+    padding: 12px 20px;
+  }
+  .sticky-inner { max-width: 640px; margin: 0 auto; display: flex; align-items: center; gap: 12px; }
+  .sticky-label { font-size: 11px; color: var(--amber); font-weight: 700; letter-spacing: 0.02em; white-space: nowrap; }
+  .sticky-text { font-size: 14px; color: var(--text); flex: 1; }
+  .sticky-text b { color: var(--text); }
+
+  /* ---------- HERO ---------- */
+  .hero { padding: 36px 0 20px; }
+  .hero-emoji { font-size: 40px; margin-bottom: 12px; display: block; }
+  h1 { font-size: 28px; font-weight: 800; margin: 0 0 8px; letter-spacing: -0.02em; line-height: 1.15; }
+  .hero-sub { color: var(--text-dim); font-size: 15px; line-height: 1.5; margin: 0; }
+  .editable-hint { color: var(--text-faint); font-size: 12px; margin-top: 10px; }
+
+  /* ---------- PROGRESS ---------- */
+  .progress-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 16px 18px;
+    margin: 20px 0;
+  }
+  .progress-top { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px; }
+  .progress-title { font-size: 13px; color: var(--text-dim); font-weight: 600; }
+  .progress-count { font-size: 13px; color: var(--amber); font-weight: 700; }
+  .progress-track { height: 8px; background: var(--bg-raised); border-radius: 8px; overflow: hidden; }
+  .progress-fill { height: 100%; background: linear-gradient(90deg, var(--amber), var(--green)); border-radius: 8px; transition: width 0.4s ease; width: 0%; }
+
+  /* ---------- SECTIONS ---------- */
+  section { margin: 34px 0; }
+  .sec-head { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+  .sec-num {
+    width: 28px; height: 28px; border-radius: 8px;
+    background: var(--bg-card); border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 700; color: var(--amber); flex-shrink: 0;
+  }
+  h2 { font-size: 19px; font-weight: 700; margin: 0; letter-spacing: -0.01em; }
+  .sec-desc { color: var(--text-dim); font-size: 14px; line-height: 1.6; margin: 0 0 16px; }
+
+  /* ---------- CRITICAL BANNER ---------- */
+  .critical {
+    background: var(--red-dim);
+    border: 1px solid #5C2A2A;
+    border-radius: 14px;
+    padding: 18px;
+    margin: 34px 0;
+  }
+  .critical-tag { font-size: 11px; font-weight: 800; color: var(--red); letter-spacing: 0.04em; margin-bottom: 8px; }
+  .critical p { margin: 0 0 8px; font-size: 14px; line-height: 1.6; color: #F5D5D5; }
+  .critical p:last-child { margin-bottom: 0; }
+  .critical b { color: #fff; }
+
+  /* ---------- IF-THEN CARDS ---------- */
+  .rule-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 16px;
+    margin-bottom: 10px;
+    display: flex; gap: 12px; align-items: flex-start;
+  }
+  .rule-if { font-size: 11px; font-weight: 800; color: var(--amber); letter-spacing: 0.03em; flex-shrink: 0; padding-top: 1px; min-width: 34px; }
+  .rule-body { font-size: 14.5px; line-height: 1.55; color: var(--text); }
+  .rule-body .then { color: var(--text-dim); }
+
+  /* ---------- KEY FACTS GRID ---------- */
+  .facts { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
+  .fact {
+    background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px;
+    padding: 14px;
+  }
+  .fact.full { grid-column: 1 / -1; }
+  .fact-label { font-size: 11px; color: var(--text-faint); text-transform: none; margin-bottom: 6px; font-weight: 600; }
+  .fact-value { font-size: 16px; font-weight: 700; color: var(--text); line-height: 1.3; }
+  .fact-value.amber { color: var(--amber); }
+  .fact-value .edit { color: var(--text-faint); font-weight: 400; font-style: italic; font-size: 14px; }
+  .fact-sub { font-size: 12.5px; color: var(--text-dim); margin-top: 4px; }
+
+  /* ---------- CHECKLIST ---------- */
+  .checklist { display: flex; flex-direction: column; gap: 8px; }
+  .check-item {
+    display: flex; align-items: flex-start; gap: 12px;
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: 12px; padding: 13px 14px;
+    cursor: pointer; user-select: none;
+    transition: background 0.15s, border-color 0.15s;
+  }
+  .check-item:active { transform: scale(0.99); }
+  .check-item.done { background: var(--green-dim); border-color: #1E5A44; }
+  .check-box {
+    width: 22px; height: 22px; border-radius: 7px;
+    border: 2px solid var(--text-faint);
+    flex-shrink: 0; margin-top: 1px;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.15s;
+  }
+  .check-item.done .check-box { background: var(--green); border-color: var(--green); }
+  .check-box svg { width: 13px; height: 13px; opacity: 0; transition: opacity 0.15s; }
+  .check-item.done .check-box svg { opacity: 1; }
+  .check-label { font-size: 14.5px; line-height: 1.5; color: var(--text); }
+  .check-item.done .check-label { color: var(--text-dim); text-decoration: line-through; text-decoration-color: var(--text-faint); }
+
+  /* ---------- LINK CARD ---------- */
+  .link-card {
+    display: flex; align-items: center; gap: 14px;
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: 14px; padding: 16px; text-decoration: none;
+    transition: border-color 0.15s;
+  }
+  .link-card:active { border-color: var(--amber); }
+  .link-icon {
+    width: 42px; height: 42px; border-radius: 10px;
+    background: var(--amber-dim); display: flex; align-items: center; justify-content: center;
+    font-size: 20px; flex-shrink: 0;
+  }
+  .link-title { font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 2px; }
+  .link-sub { font-size: 12.5px; color: var(--text-dim); }
+  .link-arrow { color: var(--text-faint); font-size: 18px; margin-left: auto; }
+
+  /* ---------- APP LIST ---------- */
+  .app-row {
+    display: flex; align-items: center; gap: 12px;
+    padding: 12px 0; border-bottom: 1px solid var(--border);
+  }
+  .app-row:last-child { border-bottom: none; }
+  .app-emoji { font-size: 22px; width: 32px; text-align: center; flex-shrink: 0; }
+  .app-name { font-size: 14.5px; font-weight: 600; color: var(--text); }
+  .app-why { font-size: 12.5px; color: var(--text-dim); margin-top: 1px; }
+
+  /* ---------- COMMIT BOX ---------- */
+  .commit-box {
+    background: var(--bg-raised); border: 1px dashed var(--text-faint);
+    border-radius: 14px; padding: 18px;
+  }
+  .commit-box p { font-size: 13.5px; color: var(--text-dim); margin: 0 0 12px; }
+  .commit-text {
+    background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px;
+    padding: 12px 14px; font-size: 13.5px; color: var(--text); line-height: 1.6;
+    font-family: ui-monospace, monospace;
+  }
+  .copy-btn {
+    margin-top: 10px; width: 100%; padding: 12px;
+    background: var(--amber); color: #1A1000; border: none; border-radius: 10px;
+    font-size: 14px; font-weight: 700; cursor: pointer; font-family: var(--font);
+  }
+  .copy-btn:active { opacity: 0.85; }
+  .copy-btn.copied { background: var(--green); }
+
+  /* ---------- COUNTDOWN ---------- */
+  .countdown-card {
+    background: linear-gradient(135deg, var(--amber-dim), var(--bg-card));
+    border: 1px solid #5A3E1E;
+    border-radius: 14px; padding: 18px; text-align: center;
+  }
+  .countdown-num { font-size: 34px; font-weight: 800; color: var(--amber); letter-spacing: -0.02em; }
+  .countdown-label { font-size: 13px; color: var(--text-dim); margin-top: 4px; }
+
+  /* ---------- FOOTER SUMMARY ---------- */
+  .summary-card {
+    background: var(--bg-card); border: 1px solid var(--border); border-radius: 14px;
+    padding: 20px;
+  }
+  .summary-card h3 { font-size: 15px; margin: 0 0 12px; color: var(--amber); }
+  .summary-row { display: flex; gap: 10px; font-size: 14px; line-height: 1.5; margin-bottom: 10px; color: var(--text); }
+  .summary-row:last-child { margin-bottom: 0; }
+  .summary-row .n { color: var(--amber); font-weight: 800; flex-shrink: 0; }
+
+  .editnote {
+    display: inline-block; font-size: 11px; color: var(--text-faint);
+    border: 1px dashed var(--text-faint); border-radius: 6px; padding: 2px 7px; margin-top: 8px;
+  }
+
+  ::selection { background: var(--amber); color: #1A1000; }
+</style>
+</head>
+<body>
+
+<div class="sticky-bar">
+  <div class="sticky-inner">
+    <span class="sticky-label">ADESSO</span>
+    <span class="sticky-text" id="next-action">Carico la lista…</span>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <div class="hero">
+    <span class="hero-emoji">🧭</span>
+    <h1>Guida al viaggio</h1>
+    <p class="hero-sub">Non serve leggerla tutta d'un fiato. Serve fare le cose quando questa pagina te lo dice. Spunta man mano — resta salvato.</p>
+    <div class="editable-hint">✏️ Nome viaggio, luogo di ritrovo e orario volo sono segnaposto — vanno sostituiti con i dati veri.</div>
+  </div>
+
+  <div class="progress-card">
+    <div class="progress-top">
+      <span class="progress-title">Quanto hai fatto finora</span>
+      <span class="progress-count" id="progress-count">0 / 0</span>
+    </div>
+    <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+  </div>
+
+  <!-- ================= SECTION: PARTENZA ================= -->
+  <section>
+    <div class="sec-head">
+      <div class="sec-num">1</div>
+      <h2>La partenza — questa è la parte che ti frega</h2>
+    </div>
+    <p class="sec-desc">Il 90% dei disastri di viaggio succede qui, non in vacanza. Tre numeri, memorizzali, non serve altro.</p>
+
+    <div class="facts">
+      <div class="fact">
+        <div class="fact-label">Ritrovo</div>
+        <div class="fact-value amber"><span class="edit">es. 05:30 — Piazza Duomo</span></div>
+      </div>
+      <div class="fact">
+        <div class="fact-label">In aeroporto entro</div>
+        <div class="fact-value">2h prima del volo</div>
+        <div class="fact-sub">non "circa", entro.</div>
+      </div>
+      <div class="fact full">
+        <div class="fact-label">Volo</div>
+        <div class="fact-value"><span class="edit">es. 08:30 — inserire orario reale</span></div>
+      </div>
+    </div>
+
+    <div class="critical">
+      <div class="critical-tag">⚠ LA REGOLA CHE CONTA DAVVERO</div>
+      <p>Il gruppo <b>non ti aspetta</b> oltre 10 minuti. Non per cattiveria: perché un volo perso da uno diventa un volo perso da tutti, e i soldi del biglietto non tornano indietro.</p>
+      <p>Se sai già, guardandoti allo specchio adesso, che tenderai ad arrivare in ritardo: il tuo orario di ritrovo reale non è quello scritto sopra. È <b>15 minuti prima</b>. Sempre. Trattalo come un dato di fatto su di te, non come un giudizio.</p>
+    </div>
+
+    <div class="rule-card">
+      <div class="rule-if">SE</div>
+      <div class="rule-body">sono le <b>21:00 la sera prima</b> della partenza, <span class="then">→ allora apro questa pagina e finisco tutta la sezione "Da fare stasera" più sotto. Non domani mattina.</span></div>
+    </div>
+    <div class="rule-card">
+      <div class="rule-if">SE</div>
+      <div class="rule-body">penso <b>"tanto faccio in tempo"</b>, <span class="then">→ allora è proprio il segnale che sto per fare tardi. È il pensiero classico di chi arriva 20 minuti dopo.</span></div>
+    </div>
+    <div class="rule-card">
+      <div class="rule-if">SE</div>
+      <div class="rule-body">rischio di <b>fare tardi al ritrovo</b>, <span class="then">→ allora scrivo subito nel gruppo, non quando sono già in ritardo. Un messaggio 20 minuti prima è normale, uno zero minuti prima è un problema per tutti.</span></div>
+    </div>
+  </section>
+
+  <!-- ================= SECTION: BAGAGLIO ================= -->
+  <section>
+    <div class="sec-head">
+      <div class="sec-num">2</div>
+      <h2>Bagaglio</h2>
+    </div>
+    <p class="sec-desc">Due borse, un limite di peso unico. Sforare costa caro in aeroporto — molto più che pesarlo a casa.</p>
+
+    <div class="facts">
+      <div class="fact">
+        <div class="fact-label">Piccolo (sotto sedile)</div>
+        <div class="fact-value">40×30×20 cm</div>
+      </div>
+      <div class="fact">
+        <div class="fact-label">Grande (cappelliera)</div>
+        <div class="fact-value">55×40×20 cm</div>
+      </div>
+      <div class="fact full">
+        <div class="fact-label">Peso totale massimo — insieme, non a testa</div>
+        <div class="fact-value amber">10 kg</div>
+      </div>
+    </div>
+
+    <div class="rule-card">
+      <div class="rule-if">SE</div>
+      <div class="rule-body">ho una <b>bilancia da bagno</b> in casa, <span class="then">→ allora la sera prima peso lo zaino tenendolo in mano sopra la bilancia (peso totale meno il mio peso). Due minuti, zero sorprese al gate.</span></div>
+    </div>
+    <div class="rule-card">
+      <div class="rule-if">SE</div>
+      <div class="rule-body">non ho una bilancia, <span class="then">→ allora lo peso al supermercato o lo chiedo a un amico del gruppo prima di partire — non lo scopro in aeroporto.</span></div>
+    </div>
+  </section>
+
+  <!-- ================= SECTION: CHECKLIST STASERA ================= -->
+  <section>
+    <div class="sec-head">
+      <div class="sec-num">3</div>
+      <h2>Da fare stasera (non domani mattina)</h2>
+    </div>
+    <p class="sec-desc">Spunta ogni voce quando la fai davvero, non quando pensi di farla. Resta salvato se richiudi la pagina.</p>
+    <div class="checklist" id="checklist-tonight"></div>
+  </section>
+
+  <!-- ================= SECTION: COSA PORTARE ================= -->
+  <section>
+    <div class="sec-head">
+      <div class="sec-num">4</div>
+      <h2>Cosa portare</h2>
+    </div>
+    <p class="sec-desc">Solo l'essenziale che si dimentica davvero. Il resto lo capisci da solo.</p>
+    <div class="checklist" id="checklist-pack"></div>
+  </section>
+
+  <!-- ================= SECTION: APP ================= -->
+  <section>
+    <div class="sec-head">
+      <div class="sec-num">5</div>
+      <h2>App da avere già installate</h2>
+    </div>
+    <p class="sec-desc">Scaricale ora, con il wifi di casa. In aeroporto il wifi pubblico è lento o non c'è.</p>
+    <div class="fact full" style="padding:6px 18px;">
+      <div class="app-row">
+        <div class="app-emoji">🎫</div>
+        <div><div class="app-name">App della compagnia aerea <span class="editnote">es. Ryanair / EasyJet</span></div><div class="app-why">carta d'imbarco offline, salva se internet non prende</div></div>
+      </div>
+      <div class="app-row">
+        <div class="app-emoji">🗺️</div>
+        <div><div class="app-name">Mappa scaricata offline</div><div class="app-why">Google Maps → scarica area destinazione, prima di partire</div></div>
+      </div>
+      <div class="app-row">
+        <div class="app-emoji">💬</div>
+        <div><div class="app-name">Chat di gruppo <span class="editnote">es. WhatsApp "Nome Viaggio"</span></div><div class="app-why">verifica ORA di essere dentro, non il giorno della partenza</div></div>
+      </div>
+      <div class="app-row">
+        <div class="app-emoji">💳</div>
+        <div><div class="app-name">App pagamenti esteri <span class="editnote">es. Revolut, N26</span></div><div class="app-why">evita commissioni assurde sui prelievi</div></div>
+      </div>
+      <div class="app-row">
+        <div class="app-emoji">🌦️</div>
+        <div><div class="app-name">Meteo destinazione</div><div class="app-why">controllalo 2 giorni prima, non mentre fai lo zaino</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= SECTION: SOLDI ================= -->
+  <section>
+    <div class="sec-head">
+      <div class="sec-num">6</div>
+      <h2>Soldi</h2>
+    </div>
+    <div class="rule-card">
+      <div class="rule-if">SE</div>
+      <div class="rule-body">la mia banca <b>blocca i pagamenti esteri</b> di default, <span class="then">→ allora la avviso PRIMA di partire, non dal ristorante con la carta rifiutata.</span></div>
+    </div>
+    <div class="rule-card">
+      <div class="rule-if">SE</div>
+      <div class="rule-body">tendo a <b>perdere il conto delle spese di gruppo</b>, <span class="then">→ allora ogni spesa condivisa la scrivo nella chat entro la stessa serata — non "poi faccio i conti alla fine".</span></div>
+    </div>
+    <div class="fact full" style="margin-top:10px;">
+      <div class="fact-label">Contanti consigliati <span class="editnote">esempio</span></div>
+      <div class="fact-value">50–100 €</div>
+      <div class="fact-sub">per posti che non accettano carte</div>
+    </div>
+  </section>
+
+  <!-- ================= SECTION: PROGRAMMA E COSTI ================= -->
+  <section>
+    <div class="sec-head">
+      <div class="sec-num">7</div>
+      <h2>Programma e costi</h2>
+    </div>
+    <p class="sec-desc">Il dettaglio giorno per giorno e chi deve ancora pagare cosa è tutto nel file condiviso.</p>
+    <a class="link-card" href="#" id="excel-link">
+      <div class="link-icon">📊</div>
+      <div>
+        <div class="link-title">Apri il foglio Excel del viaggio</div>
+        <div class="link-sub">programma completo + spese — <span class="editnote" style="margin:0;">sostituire con il link vero</span></div>
+      </div>
+      <div class="link-arrow">→</div>
+    </a>
+    <div class="rule-card" style="margin-top:12px;">
+      <div class="rule-if">SE</div>
+      <div class="rule-body">non hai <b>ancora aperto</b> il file una volta, <span class="then">→ allora fallo ora, prima di continuare questa pagina. Due minuti, e sai già quanto devi.</span></div>
+    </div>
+  </section>
+
+  <!-- ================= COMMITMENT ================= -->
+  <section>
+    <div class="sec-head">
+      <div class="sec-num">8</div>
+      <h2>Impegnati pubblicamente (funziona davvero)</h2>
+    </div>
+    <p class="sec-desc">Dirlo agli altri rende molto più difficile sparire il giorno della partenza. Copialo e incollalo nel gruppo.</p>
+    <div class="commit-box">
+      <p>Un messaggio semplice, mandato ORA, non il giorno prima:</p>
+      <div class="commit-text" id="commit-text">Ho letto la guida del viaggio. Bagaglio sotto i limiti, sveglia impostata, sarò al ritrovo puntuale. Se sgarro, ditemelo pure 😅</div>
+      <button class="copy-btn" id="copy-btn">Copia messaggio</button>
+    </div>
+  </section>
+
+  <!-- ================= SUMMARY ================= -->
+  <section>
+    <div class="summary-card">
+      <h3>Se hai letto solo questo</h3>
+      <div class="summary-row"><span class="n">1</span><span>Ritrovo puntuale, 15 min prima se sai che fai tardi. Aeroporto 2h prima del volo.</span></div>
+      <div class="summary-row"><span class="n">2</span><span>Bagagli entro 10 kg totali — pesali stasera, non domattina.</span></div>
+      <div class="summary-row"><span class="n">3</span><span>Checklist "da fare stasera" completata prima di dormire.</span></div>
+      <div class="summary-row"><span class="n">4</span><span>Foglio Excel aperto almeno una volta, spese scritte man mano.</span></div>
+    </div>
+  </section>
+
+</div>
+
+<script>
+(function () {
+  const TONIGHT_ITEMS = [
+    "Ho pesato il bagaglio (max 10 kg totali)",
+    "Documenti e biglietti sono in un unico posto",
+    "Telefono e powerbank in carica",
+    "Ho impostato almeno 2 sveglie",
+    "Ho controllato il meteo della destinazione"
+  ];
+  const PACK_ITEMS = [
+    "Carta d'identità o passaporto (validità controllata)",
+    "Biglietti aerei salvati offline sul telefono",
+    "Adattatore di corrente, se serve",
+    "Powerbank + cavi di ricarica",
+    "Medicinali personali essenziali"
+  ];
+
+  let state = { tonight: {}, pack: {} };
+
+  function renderList(containerId, items, stateKey) {
+    const el = document.getElementById(containerId);
+    el.innerHTML = "";
+    items.forEach((label, i) => {
+      const id = stateKey + "-" + i;
+      const done = !!state[stateKey][id];
+      const row = document.createElement("div");
+      row.className = "check-item" + (done ? " done" : "");
+      row.innerHTML =
+        '<div class="check-box"><svg viewBox="0 0 24 24" fill="none" stroke="#0B1F17" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div>' +
+        '<div class="check-label">' + label + "</div>";
+      row.addEventListener("click", () => {
+        state[stateKey][id] = !state[stateKey][id];
+        renderList(containerId, items, stateKey);
+        renderProgress();
+        persist();
+      });
+      el.appendChild(row);
+    });
+  }
+
+  function totalCounts() {
+    const total = TONIGHT_ITEMS.length + PACK_ITEMS.length;
+    const done =
+      Object.values(state.tonight).filter(Boolean).length +
+      Object.values(state.pack).filter(Boolean).length;
+    return { done, total };
+  }
+
+  function renderProgress() {
+    const { done, total } = totalCounts();
+    document.getElementById("progress-count").textContent = done + " / " + total;
+    document.getElementById("progress-fill").style.width = (total ? (done / total) * 100 : 0) + "%";
+    renderNextAction();
+  }
+
+  function renderNextAction() {
+    const nextEl = document.getElementById("next-action");
+    for (let i = 0; i < TONIGHT_ITEMS.length; i++) {
+      if (!state.tonight["tonight-" + i]) {
+        nextEl.innerHTML = "<b>" + TONIGHT_ITEMS[i] + "</b>";
+        return;
+      }
+    }
+    for (let i = 0; i < PACK_ITEMS.length; i++) {
+      if (!state.pack["pack-" + i]) {
+        nextEl.innerHTML = "Prepara: <b>" + PACK_ITEMS[i] + "</b>";
+        return;
+      }
+    }
+    nextEl.innerHTML = "<b>Tutto fatto. Ora puoi rilassarti.</b> 🎉";
+  }
+
+  function persist() {
+    try {
+      localStorage.setItem("trip-guide-state", JSON.stringify(state));
+    } catch (e) {}
+  }
+
+  function load() {
+    try {
+      const raw = localStorage.getItem("trip-guide-state");
+      if (raw) state = JSON.parse(raw);
+    } catch (e) {}
+  }
+
+  load();
+  renderList("checklist-tonight", TONIGHT_ITEMS, "tonight");
+  renderList("checklist-pack", PACK_ITEMS, "pack");
+  renderProgress();
+
+  // copy commit message
+  document.getElementById("copy-btn").addEventListener("click", function () {
+    const text = document.getElementById("commit-text").textContent;
+    const btn = this;
+    function done() {
+      btn.textContent = "Copiato ✓";
+      btn.classList.add("copied");
+      setTimeout(() => { btn.textContent = "Copia messaggio"; btn.classList.remove("copied"); }, 1600);
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(done).catch(done);
+    } else {
+      done();
+    }
+  });
+})();
+</script>
+
+</body>
+</html>
